@@ -50,16 +50,16 @@ def get_connection():
 
 
 def test_connection() -> bool:
-    """
-    Test the PostgreSQL connection.
-
-    Returns
-    -------
-    bool
-        True if the connection succeeds.
-    """
     try:
-        with get_engine().connect():
+        engine = get_engine()
+
+        with engine.connect() as connection:
+            print("✅ PostgreSQL connection successful!")
             return True
-    except Exception:
+
+    except Exception as exc:
+        print("\n===== DATABASE ERROR =====")
+        print(type(exc).__name__)
+        print(exc)
+        print("==========================\n")
         return False
