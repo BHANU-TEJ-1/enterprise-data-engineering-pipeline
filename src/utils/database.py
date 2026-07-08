@@ -20,7 +20,11 @@ from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.engine import Engine
 
-load_dotenv()
+from pathlib import Path
+import os
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+load_dotenv(PROJECT_ROOT / ".env")
 
 
 def get_engine() -> Engine:
@@ -54,12 +58,12 @@ def test_connection() -> bool:
         engine = get_engine()
 
         with engine.connect() as connection:
-            print("✅ PostgreSQL connection successful!")
+            print("PostgreSQL connection successful!")
             return True
 
     except Exception as exc:
-        print("\n===== DATABASE ERROR =====")
+        print("DATABASE ERROR")
         print(type(exc).__name__)
         print(exc)
-        print("==========================\n")
+        print("=====")
         return False

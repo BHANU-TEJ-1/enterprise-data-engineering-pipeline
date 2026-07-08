@@ -8,6 +8,8 @@ import pandas as pd
 
 from src.utils.database import get_engine
 from src.utils.logger import get_logger
+from sqlalchemy import text
+
 
 logger = get_logger(__name__)
 
@@ -22,9 +24,10 @@ def read_table(table_name: str) -> pd.DataFrame:
     try:
         engine = get_engine()
 
-        query = f"SELECT * FROM {table_name};"
+        query = text(f"SELECT * FROM {table_name}")
 
-        dataframe = pd.read_sql(query, engine)
+        with engine.connect() as connection:
+            dataframe = pd.read_sql(query, connection)
 
         logger.info(
             f"Successfully loaded {len(dataframe)} rows "
