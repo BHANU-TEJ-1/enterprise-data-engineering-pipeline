@@ -1,0 +1,65 @@
+'''It should only be responsible for creating and returning a database connection/engine.
+
+It should not:
+
+execute SQL
+read tables
+insert data
+perform ETL logic
+
+Single Responsibility Principle.'''
+"""
+database.py
+
+Database utility functions for the Enterprise Data Engineering Pipeline.
+"""
+
+import os
+
+from dotenv import load_dotenv
+from sqlalchemy import create_engine
+from sqlalchemy.engine import Engine
+
+load_dotenv()
+
+
+def get_engine() -> Engine:
+    """
+    Create and return a SQLAlchemy engine.
+    """
+
+    host = os.getenv("POSTGRES_HOST")
+    port = os.getenv("POSTGRES_PORT")
+    database = os.getenv("POSTGRES_DATABASE")
+    user = os.getenv("POSTGRES_USER")
+    password = os.getenv("POSTGRES_PASSWORD")
+
+    connection_url = (
+        f"postgresql+psycopg2://"
+        f"{user}:{password}@{host}:{port}/{database}"
+    )
+
+    return create_engine(connection_url)
+
+
+def get_connection():
+    """
+    Return an active database connection.
+    """
+    return get_engine().connect()
+
+
+def test_connection() -> bool:
+    """
+    Test the PostgreSQL connection.
+
+    Returns
+    -------
+    bool
+        True if the connection succeeds.
+    """
+    try:
+        with get_engine().connect():
+            return True
+    except Exception:
+        return False

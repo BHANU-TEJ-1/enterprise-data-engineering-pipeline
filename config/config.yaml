@@ -1,0 +1,12 @@
+paths:
+  source:
+    csv: data/source/csv
+    json: data/source/json
+    xml: data/source/xml
+
+  bronze: data/bronze
+  silver: data/silver
+  rejected: data/rejected
+
+database:
+  schema: public
