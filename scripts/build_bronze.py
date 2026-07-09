@@ -8,7 +8,7 @@ from src.bronze.bronze_layer import BronzeLayer
 from src.ingestion.ingestion_manager import ingest
 
 
-def main():
+def build_bronze():
 
     bronze = BronzeLayer()
 
@@ -47,4 +47,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    build_bronze()

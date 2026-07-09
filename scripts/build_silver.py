@@ -7,7 +7,7 @@ Build the complete Silver Layer.
 from src.silver.silver_manager import SilverManager
 
 
-def main():
+def build_silver():
 
     manager = SilverManager()
 
@@ -59,4 +59,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    build_silver()

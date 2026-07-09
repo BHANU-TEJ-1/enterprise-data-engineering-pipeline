@@ -20,72 +20,110 @@ class DimensionBuilder:
     def __init__(self):
         logger.info("Dimension Builder Initialized.")
 
+    # -------------------------------------------------------
+    # Customer Dimension
+    # -------------------------------------------------------
+
     def build_customer_dimension(
         self,
         customers_df: pd.DataFrame,
     ) -> pd.DataFrame:
-        """
-        Build Customer Dimension.
-        """
 
         logger.info("Building Customer Dimension.")
 
-        dimension_df = (
+        df = (
             customers_df
             .drop_duplicates()
             .reset_index(drop=True)
+            .copy()
         )
 
-        logger.info(
-            f"Customer Dimension created with {len(dimension_df)} rows."
+        df.insert(
+            0,
+            "customer_sk",
+            range(1, len(df) + 1),
         )
 
-        return dimension_df
+        df["effective_date"] = pd.Timestamp.today().normalize()
+        df["expiry_date"] = pd.NaT
+        df["is_current"] = True
+
+        return df
+
+    # -------------------------------------------------------
+    # Product Dimension
+    # -------------------------------------------------------
 
     def build_product_dimension(
         self,
         products_df: pd.DataFrame,
     ) -> pd.DataFrame:
-        """
-        Build Product Dimension.
-        """
 
-        raise NotImplementedError(
-            "Product Dimension not implemented yet."
+        logger.info("Building Product Dimension.")
+
+        df = (
+            products_df
+            .drop_duplicates()
+            .reset_index(drop=True)
+            .copy()
         )
+
+        df.insert(
+            0,
+            "product_sk",
+            range(1, len(df) + 1),
+        )
+
+        return df
+
+    # -------------------------------------------------------
+    # Seller Dimension
+    # -------------------------------------------------------
 
     def build_seller_dimension(
         self,
         sellers_df: pd.DataFrame,
     ) -> pd.DataFrame:
-        """
-        Build Seller Dimension.
-        """
 
-        raise NotImplementedError(
-            "Seller Dimension not implemented yet."
+        logger.info("Building Seller Dimension.")
+
+        df = (
+            sellers_df
+            .drop_duplicates()
+            .reset_index(drop=True)
+            .copy()
         )
+
+        df.insert(
+            0,
+            "seller_sk",
+            range(1, len(df) + 1),
+        )
+
+        return df
+
+    # -------------------------------------------------------
+    # Geolocation Dimension
+    # -------------------------------------------------------
 
     def build_geolocation_dimension(
         self,
         geolocation_df: pd.DataFrame,
     ) -> pd.DataFrame:
-        """
-        Build Geolocation Dimension.
-        """
 
-        raise NotImplementedError(
-            "Geolocation Dimension not implemented yet."
+        logger.info("Building Geolocation Dimension.")
+
+        df = (
+            geolocation_df
+            .drop_duplicates()
+            .reset_index(drop=True)
+            .copy()
         )
 
-    def build_date_dimension(
-        self,
-        dataframe: pd.DataFrame,
-    ) -> pd.DataFrame:
-        """
-        Build Date Dimension.
-        """
-
-        raise NotImplementedError(
-            "Date Dimension not implemented yet."
+        df.insert(
+            0,
+            "geo_sk",
+            range(1, len(df) + 1),
         )
+
+        return df
