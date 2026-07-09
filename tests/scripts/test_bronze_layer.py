@@ -1,4 +1,4 @@
-from src.bronze.bronze_layer import write_to_bronze
+from src.bronze.bronze_layer import BronzeLayer
 from src.ingestion.csv_ingestion import read_csv
 
 
@@ -6,10 +6,11 @@ def main():
 
     df = read_csv("C:/Users/TEJ/OneDrive/Desktop/EnterpriseDataSources/CRM/customers.csv")
 
-    write_to_bronze(
-        dataframe=df,
-        dataset_name="customers"
-    )
+    bronze = BronzeLayer()
+
+    bronze.write_parquet(
+                          df,
+                          "customers")
 
     print("\nBronze layer test completed successfully.")
 

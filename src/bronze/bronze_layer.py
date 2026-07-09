@@ -1,7 +1,8 @@
 """
 bronze_layer.py
 
-Writes raw ingested data into the Bronze Layer as Parquet files.
+Writes raw ingested DataFrames
+to the Bronze Layer as Parquet files.
 """
 
 from pathlib import Path
@@ -10,50 +11,72 @@ import pandas as pd
 
 from src.utils.logger import get_logger
 
+
 logger = get_logger(__name__)
 
 
-def write_to_bronze(dataframe: pd.DataFrame, dataset_name: str) -> None:
+class BronzeLayer:
     """
-    Write a DataFrame to the Bronze Layer.
-
-    Parameters
-    ----------
-    dataframe : pd.DataFrame
-        DataFrame to be stored.
-
-    dataset_name : str
-        Name of the dataset.
-
-    Raises
-    ------
-    RuntimeError
-        If writing the parquet file fails.
+    Writes DataFrames to the Bronze Layer.
     """
 
-    bronze_directory = Path("data/bronze")
-    bronze_directory.mkdir(parents=True, exist_ok=True)
+    def __init__(
+        self,
+        output_directory: str = "data/bronze",
+    ):
 
-    output_path = bronze_directory / f"{dataset_name}.parquet"
+        self.output_directory = Path(output_directory)
 
-    logger.info(f"Writing Bronze dataset: {output_path}")
-
-    try:
-
-        dataframe.to_parquet(
-            output_path,
-            index=False,
-            compression="snappy",
+        self.output_directory.mkdir(
+            parents=True,
+            exist_ok=True,
         )
 
         logger.info(
-            f"Bronze dataset '{dataset_name}' written successfully."
+            f"Bronze output directory: {self.output_directory}"
         )
 
-    except Exception as exc:
+    def write_parquet(
+        self,
+        df: pd.DataFrame,
+        table_name: str,
+    ) -> str:
+        """
+        Write a DataFrame to the Bronze Layer.
 
-        logger.exception("Failed to write Bronze dataset.")
+        Returns
+        -------
+        str
+            Path of the written parquet file.
+        """
 
-        raise RuntimeError(
-            f"Unable to write Bronze dataset: {dataset_name}"
-        ) from exc
+        try:
+
+            output_path = (
+                self.output_directory /
+                f"{table_name}.parquet"
+            )
+
+            logger.info(
+                f"Writing '{table_name}' to Bronze Layer..."
+            )
+
+            df.to_parquet(
+                output_path,
+                index=False,
+                compression="snappy",
+            )
+
+            logger.info(
+                f"Successfully wrote {output_path}"
+            )
+
+            return str(output_path)
+
+        except Exception:
+
+            logger.exception(
+                f"Failed writing '{table_name}'"
+            )
+
+            raise
