@@ -1,5 +1,5 @@
 from src.ingestion.csv_ingestion import read_csv
-path="C:\EnterpriseDataSources\olist_sellers_dataset.csv"
+path="C:\Users\TEJ\OneDrive\Desktop\EnterpriseDataSources\CRM\geolocation.csv"
 
 df = read_csv(path)
 

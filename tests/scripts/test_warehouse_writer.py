@@ -1,25 +1,18 @@
 import pandas as pd
 
-from src.warehouse.warehouse_writer import WarehouseWriter
+from src.warehouse.warehouse_manager import WarehouseManager
 
 
 def main():
-    df = pd.DataFrame(
-        {
-            "id": [1, 2, 3],
-            "name": ["Alice", "Bob", "Charlie"],
-        }
+    customers_df = pd.read_parquet(
+        "data/silver/customers.parquet"
     )
 
-    writer = WarehouseWriter("data/gold")
+    manager = WarehouseManager("data/gold")
 
-    path = writer.write_parquet(
-        dataframe=df,
-        table_name="dim_customer",
-    )
+    manager.build_customer_dimension(customers_df)
 
-    print(f"\nWarehouse table created successfully!")
-    print(path)
+    print("\nWarehouse completed successfully!")
 
 
 if __name__ == "__main__":

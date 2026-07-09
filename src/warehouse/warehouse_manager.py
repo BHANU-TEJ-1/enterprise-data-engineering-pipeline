@@ -1,35 +1,70 @@
+"""
+warehouse_manager.py
+
+Orchestrates Data Warehouse creation.
+"""
+
 import pandas as pd
 
 from src.utils.logger import get_logger
-from src.warehouse.dimensions.customer_dimension_builder import (
-    CustomerDimensionBuilder,
-)
+from src.warehouse.dimension_builder import DimensionBuilder
+from src.warehouse.fact_builder import FactBuilder
+from src.warehouse.scd_manager import SCDManager
 from src.warehouse.warehouse_writer import WarehouseWriter
+
+
+logger = get_logger(__name__)
 
 
 class WarehouseManager:
     """
-    Orchestrates the Data Warehouse creation process.
+    Orchestrates warehouse creation.
     """
 
-    def __init__(self, warehouse_path: str):
-        self.logger = get_logger(__name__)
+    def __init__(
+        self,
+        output_directory: str = "data/gold",
+    ):
 
-        self.writer = WarehouseWriter(warehouse_path)
-        self.customer_builder = CustomerDimensionBuilder()
+        self.dimension_builder = DimensionBuilder()
+        self.fact_builder = FactBuilder()
+        self.scd_manager = SCDManager()
+        self.writer = WarehouseWriter(output_directory)
 
-    def build_customer_dimension(self, customers_df: pd.DataFrame):
+        logger.info("Warehouse Manager Initialized.")
+
+    def build_customer_dimension(
+        self,
+        customers_df: pd.DataFrame,
+    ) -> None:
         """
-        Build and write the Customer Dimension.
+        Build Customer Dimension.
         """
 
-        self.logger.info("Starting Customer Dimension creation.")
+        logger.info("Building Customer Dimension.")
 
-        dimension_df = self.customer_builder.build(customers_df)
+        dimension_df = (
+            self.dimension_builder
+            .build_customer_dimension(customers_df)
+        )
+
+        dimension_df = (
+            self.scd_manager
+            .apply_type1(dimension_df)
+        )
 
         self.writer.write_parquet(
             dataframe=dimension_df,
             table_name="dim_customer",
         )
 
-        self.logger.info("Customer Dimension created successfully.")
+        logger.info("Customer Dimension Created Successfully.")
+
+    def build_sales_fact(self):
+        """
+        Build Sales Fact Table.
+        """
+
+        raise NotImplementedError(
+            "Sales Fact not implemented yet."
+        )

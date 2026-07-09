@@ -33,7 +33,7 @@ class SilverLayer:
             f"Silver output directory: {self.output_directory}"
         )
 
-    def write(
+    def write_parquet(
         self,
         df: pd.DataFrame,
         table_name: str,
