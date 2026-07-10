@@ -8,7 +8,7 @@ from airflow.decorators import dag, task
 
 from datetime import datetime
 
-from scripts.build_bronze import main as build_bronze
+from scripts.build_bronze import build_bronze
 
 
 @dag(

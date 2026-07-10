@@ -8,7 +8,7 @@ from airflow.decorators import dag, task
 
 from datetime import datetime
 
-from scripts.build_silver import main as build_silver
+from scripts.build_silver import build_silver
 
 
 @dag(

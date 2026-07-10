@@ -8,8 +8,7 @@ from airflow.decorators import dag, task
 
 from datetime import datetime
 
-from scripts.build_warehouse import main as build_warehouse
-
+from scripts.build_warehouse import build_warehouse
 
 @dag(
     dag_id="warehouse_pipeline",

@@ -14,29 +14,85 @@ def build_bronze():
 
     sources = [
 
+        # ------------------------------------
         # CSV
-        ("csv", r"C:\Users\TEJ\OneDrive\Desktop\EnterpriseDataSources\CRM\customers.csv", "customers"),
-        ("csv", r"C:\Users\TEJ\OneDrive\Desktop\EnterpriseDataSources\CRM\geolocation.csv", "geolocation"),
+        # ------------------------------------
 
+        (
+            "csv",
+            "data/source/csv/customers.csv",
+            "customers",
+        ),
+
+        (
+            "csv",
+            "data/source/csv/geolocation.csv",
+            "geolocation",
+        ),
+
+        # ------------------------------------
         # JSON
-        ("json", r"C:\Users\TEJ\OneDrive\Desktop\EnterpriseDataSources\OMS\orders.json", "orders"),
-        ("json", r"C:\Users\TEJ\OneDrive\Desktop\EnterpriseDataSources\OMS\order_items.json", "order_items"),
+        # ------------------------------------
 
+        (
+            "json",
+            "data/source/json/orders.json",
+            "orders",
+        ),
+
+        (
+            "json",
+            "data/source/json/order_items.json",
+            "order_items",
+        ),
+
+        # ------------------------------------
         # XML
-        ("xml", r"C:\Users\TEJ\OneDrive\Desktop\EnterpriseDataSources\PIM\products.xml", "products"),
-        ("xml", r"C:\Users\TEJ\OneDrive\Desktop\EnterpriseDataSources\PIM\product_category_translation.xml", "category_translation"),
+        # ------------------------------------
 
+        (
+            "xml",
+            "data/source/xml/products.xml",
+            "products",
+        ),
+
+        (
+            "xml",
+            "data/source/xml/product_category_translation.xml",
+            "category_translation",
+        ),
+
+        # ------------------------------------
         # PostgreSQL
-        ("postgres", "payments", "payments"),
-        ("postgres", "sellers", "sellers"),
-        ("postgres", "reviews", "reviews"),
+        # ------------------------------------
+
+        (
+            "postgres",
+            "payments",
+            "payments",
+        ),
+
+        (
+            "postgres",
+            "sellers",
+            "sellers",
+        ),
+
+        (
+            "postgres",
+            "reviews",
+            "reviews",
+        ),
     ]
 
     for source_type, source, table_name in sources:
 
         print(f"Building Bronze -> {table_name}")
 
-        df = ingest(source_type, source)
+        df = ingest(
+            source_type,
+            source,
+        )
 
         bronze.write_parquet(
             df=df,
