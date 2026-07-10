@@ -9,7 +9,7 @@ __pycache__/
 # ==========================================================
 # Virtual Environments
 # ==========================================================
-# Python Virtual Environments
+
 airflow/
 .venv/
 venv/
@@ -77,8 +77,23 @@ airflow-webserver.pid
 postgres-db-volume/
 
 # ==========================================================
-# Generated Data
-# (Keep folder structure using .gitkeep files)
+# Raw Source Data
+# ==========================================================
+
+data/source/csv/*
+!data/source/csv/.gitkeep
+
+data/source/json/*
+!data/source/json/.gitkeep
+
+data/source/xml/*
+!data/source/xml/.gitkeep
+
+data/source/postgres/*
+!data/source/postgres/.gitkeep
+
+# ==========================================================
+# Generated Pipeline Data
 # ==========================================================
 
 data/bronze/*
@@ -92,6 +107,12 @@ data/gold/*
 
 data/rejected/*
 !data/rejected/.gitkeep
+
+# ==========================================================
+# SQL Backups
+# ==========================================================
+
+*.sql
 
 # ==========================================================
 # Temporary Files
